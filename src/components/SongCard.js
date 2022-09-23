@@ -80,6 +80,9 @@ export default class SongCard extends React.Component {
                 onDrop={this.handleDrop}
                 draggable="true"
             >
+            <div>
+                {num}. 
+            </div>
             <a href = {youTubeLink}>
                 {song.title} by {song.artist}
             </a>

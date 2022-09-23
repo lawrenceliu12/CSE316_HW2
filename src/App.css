@@ -162,7 +162,7 @@ body {
 .playlister-song, .playlister-song-dragged-to { 
   display:flex;
   align-items: center;
-  font-size: 24pt;
+  font-size: 32pt;
   height: 10%;  /* Switched from 20% to 10% */
   /* Added for each card */
   margin: 10px;
