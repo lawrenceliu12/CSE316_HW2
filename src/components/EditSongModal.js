@@ -2,11 +2,7 @@ import React, {Component} from "react";
 
 export default class EditSongModal extends Component{
     render(){
-        const { listKeyPair, editSongCallback, hideEditSongModalCallback } = this.props;
-        let name = "";
-        if (listKeyPair) {
-            name = listKeyPair.name;
-        }
+        const {editSongCallback, hideEditSongModalCallback } = this.props;
         return(
             <div 
                 class="modal" 

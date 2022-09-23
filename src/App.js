@@ -19,6 +19,7 @@ import SidebarHeading from './components/SidebarHeading.js';
 import SidebarList from './components/SidebarList.js';
 import Statusbar from './components/Statusbar.js';
 import EditSongModal from './components/EditSongModal';
+import DeleteSongModal from './components/DeleteSongModal';
 
 class App extends React.Component {
     constructor(props) {
@@ -254,6 +255,7 @@ class App extends React.Component {
             this.db.mutationUpdateList(this.state.currentList);
         }
     }
+
     markListForDeletion = (keyPair) => {
         this.setState(prevState => ({
             currentList: prevState.currentList,
@@ -284,34 +286,35 @@ class App extends React.Component {
             currentList: prevState.currentList,
             songIdMarkedForEdit: songId,
             sessionData: prevState.sessionData
-        }))
-        this.showEditSongModal();
+        }), () => {
+            this.showEditSongModal();
+        });
     }
 
     //Editting the database
     editSong = (key) => {
         let currentList = this.state.currentList;
-        console.log(currentList.key);
+        // console.log(currentList.key);
 
         let newTitle = document.getElementById("edit-song-title-input").value;
         let newArtist = document.getElementById("edit-song-artist-input").value;
         let newLink = document.getElementById("edit-song-link-input").value;
 
         this.setState(prevState => {
-            prevState.currentList.songs[key - 1] = 
+            currentList.songs[key - 1] = 
                 {
                     title: newTitle,
                     artist: newArtist,
                     youTubeId: newLink,
                 };
             return ({
-                currentList: prevState.currentList
+                currentList: currentList
             })
         }, () => {
-            // DELETING THE LIST FROM PERMANENT STORAGE
+            // EDITING THE SONG IN PERMANENT STORAGE
             // IS AN AFTER EFFECT
-            console.log("Key 1:", key);
-            console.log("\n\n", this.state.currentList, "\n\n");
+            // console.log("Key 1:", key);
+            // console.log("\n\n", this.state.currentList, "\n\n");
             this.db.mutationEditSong(key, currentList.key, currentList.songs[key-1]);
 
             // SO IS STORING OUR SESSION DATA
@@ -322,7 +325,39 @@ class App extends React.Component {
     //Confirmation for modal
     editMarkedSong = () => {
         this.hideEditSongModal();
-        this.editSong(this.state.songIdMarkedForEdit)
+        this.editSong(this.state.songIdMarkedForEdit);
+    }
+
+    markSongForDelete = (songId) => {
+        this.setState(prevState => {
+            return ({
+                currentList: prevState.currentList,
+                songIdMarkedForDelete: songId,
+                sessionData: prevState.sessionData
+            })},() => {
+                this.showDeleteSongModal();
+        });
+    }
+
+    deleteSong = (songId) => {
+        let currentList = this.state.currentList;
+        if (songId >= 0){
+            currentList.songs.splice(songId, 1);
+        }
+        
+        this.setState(prevState => {
+            return ({
+                currentList: currentList
+            })
+        }, () => {
+            this.db.mutationDeleteSong(currentList.key, currentList);
+            this.db.mutationUpdateSessionData(this.state.sessionData);
+        });
+    }
+
+    deleteMarkedSong = () => {
+        this.hideDeleteSongModal();
+        this.deleteSong(this.state.songIdMarkedForDelete - 1);
     }
 
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
@@ -346,6 +381,18 @@ class App extends React.Component {
     // THIS FUNCTION IS FOR HIDING THE EDIT SONG MODAL
     hideEditSongModal() {
         let modal = document.getElementById("edit-song-modal");
+        modal.classList.remove("is-visible");
+    }
+
+    //THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER TO DELETE SONG
+    showDeleteSongModal(){
+        let modal = document.getElementById("delete-song-modal");
+        modal.classList.add("is-visible");
+    }
+
+    //THIS FUNCTION IS FOR HIDING THE DELETE SONG MODAL
+    hideDeleteSongModal(){
+        let modal = document.getElementById("delete-song-modal");
         modal.classList.remove("is-visible");
     }
 
@@ -380,6 +427,7 @@ class App extends React.Component {
                     currentList={this.state.currentList}
                     moveSongCallback={this.addMoveSongTransaction} 
                     editSongCallback={this.markSongForEdit}
+                    deleteSongCallback = {this.markSongForDelete}
                 />
                 <Statusbar 
                     currentList={this.state.currentList} />
@@ -393,6 +441,10 @@ class App extends React.Component {
                     hideEditSongModalCallback={this.hideEditSongModal}
                     editSongCallback={this.editMarkedSong}
                 />
+                <DeleteSongModal
+                    hideDeleteSongModalCallback = {this.hideDeleteSongModal}
+                    deleteSongCallback = {this.deleteMarkedSong}
+                /> 
             </div>
         );
     }

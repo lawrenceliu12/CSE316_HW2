@@ -64,4 +64,11 @@ export default class DBManager {
             }
         }
     }
+
+    mutationDeleteSong = (listKey, newPlaylist) => {
+        if (this.queryIsList(listKey)){
+            let newQueryList = JSON.stringify(newPlaylist);
+            localStorage.setItem("playlister-list-" + listKey, newQueryList);
+        }
+    }
 }
