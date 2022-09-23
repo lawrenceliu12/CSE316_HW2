@@ -183,6 +183,10 @@ body {
   background-color: var(--swatch-complement)
 }
 
+.playlister-song:hover, .playlister-song-dragged-to:hover{
+  background-color:#888888;
+}
+
 input {
   font-size:20pt;
 }
