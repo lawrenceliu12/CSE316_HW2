@@ -163,7 +163,12 @@ body {
   display:flex;
   align-items: center;
   font-size: 24pt;
-  height:20%;
+  height: 10%;  /* Switched from 20% to 10% */
+  /* Added for each card */
+  margin: 10px;
+  padding: 20px;
+  border-radius: 25px;
+  background-color: var(--swatch-complement)
 }
 
 input {
