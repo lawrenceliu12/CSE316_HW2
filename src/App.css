@@ -115,12 +115,6 @@ body {
   font-size: 24pt;
 }
 
-.song{ /*Added to make the song move all the way left then shift a little to the right so it doesnt block the index */
-  position:absolute;
-  float: left;
-  margin-left: 20px;
-}
-
 .toolbar-button{
   font-size: 36pt;
 }
@@ -183,8 +177,9 @@ body {
   background-color: var(--swatch-complement)
 }
 
+/*Added so that the background when hovered is gray (og was black) */
 .playlister-song:hover, .playlister-song-dragged-to:hover{
-  background-color:#888888;
+  background-color:#888888; 
 }
 
 input {

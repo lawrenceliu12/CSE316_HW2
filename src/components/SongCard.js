@@ -80,12 +80,11 @@ export default class SongCard extends React.Component {
                 onDrop={this.handleDrop}
                 draggable="true"
             >
-            <div>
-                {num}. 
-            </div>
-            <a href = {youTubeLink} className = "song">
-                {song.title} by {song.artist}
-            </a>
+            <span>
+                {num}.
+                <a href = {youTubeLink}>{song.title} </a> by
+                <a href = {youTubeLink}> {song.artist}</a>
+            </span>
             <input
                 type="button"
                 // id={"asdf"}
