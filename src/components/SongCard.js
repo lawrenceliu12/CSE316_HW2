@@ -58,10 +58,16 @@ export default class SongCard extends React.Component {
         return this.props.id.substring("playlist-song-".length);
     }
 
+    handleEditSong = (event) => {
+        event.stopPropagation();
+        // console.log(this.props)
+        this.props.editSongCallback(this.getItemNum());
+    }
+
     render() {
         const { song } = this.props;
         let num = this.getItemNum();
-        console.log("num: " + num);
+        // console.log("num: " + num);
         let itemClass = "playlister-song";
         if (this.state.draggedTo) {
             itemClass = "playlister-song-dragged-to";
@@ -78,6 +84,7 @@ export default class SongCard extends React.Component {
                 onDragEnter={this.handleDragEnter}
                 onDragLeave={this.handleDragLeave}
                 onDrop={this.handleDrop}
+                onDoubleClick = {this.handleEditSong}
                 draggable="true"
             >
             <span>

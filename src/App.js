@@ -18,6 +18,7 @@ import PlaylistCards from './components/PlaylistCards.js';
 import SidebarHeading from './components/SidebarHeading.js';
 import SidebarList from './components/SidebarList.js';
 import Statusbar from './components/Statusbar.js';
+import EditSongModal from './components/EditSongModal';
 
 class App extends React.Component {
     constructor(props) {
@@ -263,6 +264,67 @@ class App extends React.Component {
             this.showDeleteListModal();
         });
     }
+
+    //Open up the modal
+    markSongForEdit = (songId) => {
+        let editTitleId = document.getElementById("edit-song-title-input");
+        let editArtistId = document.getElementById("edit-song-artist-input");
+        let editLinkId = document.getElementById("edit-song-link-input");
+        
+        let song = this.state.currentList.songs[songId - 1];
+        let title = song.title;
+        let artist = song.artist;
+        let link = song.youTubeId;
+        
+        editTitleId.value = title;
+        editArtistId.value = artist;
+        editLinkId.value = link;
+
+        this.setState(prevState =>({
+            currentList: prevState.currentList,
+            songIdMarkedForEdit: songId,
+            sessionData: prevState.sessionData
+        }))
+        this.showEditSongModal();
+    }
+
+    //Editting the database
+    editSong = (key) => {
+        let currentList = this.state.currentList;
+        console.log(currentList.key);
+
+        let newTitle = document.getElementById("edit-song-title-input").value;
+        let newArtist = document.getElementById("edit-song-artist-input").value;
+        let newLink = document.getElementById("edit-song-link-input").value;
+
+        this.setState(prevState => {
+            prevState.currentList.songs[key - 1] = 
+                {
+                    title: newTitle,
+                    artist: newArtist,
+                    youTubeId: newLink,
+                };
+            return ({
+                currentList: prevState.currentList
+            })
+        }, () => {
+            // DELETING THE LIST FROM PERMANENT STORAGE
+            // IS AN AFTER EFFECT
+            console.log("Key 1:", key);
+            console.log("\n\n", this.state.currentList, "\n\n");
+            this.db.mutationEditSong(key, currentList.key, currentList.songs[key-1]);
+
+            // SO IS STORING OUR SESSION DATA
+            this.db.mutationUpdateSessionData(this.state.sessionData);
+        });
+    }
+
+    //Confirmation for modal
+    editMarkedSong = () => {
+        this.hideEditSongModal();
+        this.editSong(this.state.songIdMarkedForEdit)
+    }
+
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
     showDeleteListModal() {
@@ -274,6 +336,19 @@ class App extends React.Component {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.remove("is-visible");
     }
+
+    //THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER TO EDIT SONG
+    showEditSongModal(){
+        let modal = document.getElementById("edit-song-modal");
+        modal.classList.add("is-visible");
+    }
+
+    // THIS FUNCTION IS FOR HIDING THE EDIT SONG MODAL
+    hideEditSongModal() {
+        let modal = document.getElementById("edit-song-modal");
+        modal.classList.remove("is-visible");
+    }
+
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
@@ -303,13 +378,20 @@ class App extends React.Component {
                 />
                 <PlaylistCards
                     currentList={this.state.currentList}
-                    moveSongCallback={this.addMoveSongTransaction} />
+                    moveSongCallback={this.addMoveSongTransaction} 
+                    editSongCallback={this.markSongForEdit}
+                />
                 <Statusbar 
                     currentList={this.state.currentList} />
                 <DeleteListModal
                     listKeyPair={this.state.listKeyPairMarkedForDeletion}
                     hideDeleteListModalCallback={this.hideDeleteListModal}
                     deleteListCallback={this.deleteMarkedList}
+                />
+                <EditSongModal
+                    // songKeyPair={this.state.songKeyPairMarkedForEdit}
+                    hideEditSongModalCallback={this.hideEditSongModal}
+                    editSongCallback={this.editMarkedSong}
                 />
             </div>
         );

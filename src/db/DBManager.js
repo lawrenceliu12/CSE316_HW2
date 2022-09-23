@@ -12,6 +12,12 @@ export default class DBManager {
         return list != null;
     }
 
+    queryIsSong = (key, queryList) => {
+        let song = queryList.songs[key - 1];
+        console.log(song);
+        return song != null;
+    }
+
     /**
      * This query asks local storage for a list with a particular key,
      * which is then returned by this function.
@@ -21,12 +27,18 @@ export default class DBManager {
         return JSON.parse(listString);
     }
 
+    queryGetSong = (key, queryList) => {
+        // console.log(queryList);
+        return queryList.songs[key - 1];
+    }
+
     mutationCreateList = (list) => {
         this.mutationUpdateList(list);
     }
 
     mutationUpdateList = (list) => {
         // AND FLOW THOSE CHANGES TO LOCAL STORAGE
+        console.log(list);
         let listString = JSON.stringify(list);
         localStorage.setItem("playlister-list-" + list.key, listString);
     }
@@ -39,5 +51,17 @@ export default class DBManager {
     mutationDeleteList = (key) => {
         if (this.queryIsList(key))
             localStorage.removeItem("playlister-list-" + key);
+    }
+
+    mutationEditSong = (key, listKey, newSong) => {
+        if (this.queryIsList(listKey)){
+            let queryList = this.queryGetList(listKey);
+            if (this.queryIsSong(key, queryList)){
+                queryList.songs[key - 1] = newSong;
+                let newQueryList = JSON.stringify(queryList);
+                console.log(newQueryList);
+                localStorage.setItem("playlister-list-" + listKey, newQueryList);
+            }
+        }
     }
 }
