@@ -110,6 +110,17 @@ body {
   float:left;
 }
 
+.remove-song-button{
+  float:right;
+  font-size: 24pt;
+}
+
+.song{ /*Added to make the song move all the way left then shift a little to the right so it doesnt block the index */
+  position:absolute;
+  float: left;
+  margin-left: 20px;
+}
+
 .toolbar-button{
   font-size: 36pt;
 }
@@ -162,7 +173,8 @@ body {
 .playlister-song, .playlister-song-dragged-to { 
   display:flex;
   align-items: center;
-  font-size: 32pt;
+  justify-content:space-between;
+  font-size: 32pt; /* Changed font size from 24pt to 32pt */
   height: 10%;  /* Switched from 20% to 10% */
   /* Added for each card */
   margin: 10px;

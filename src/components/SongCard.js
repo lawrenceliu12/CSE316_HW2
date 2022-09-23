@@ -83,9 +83,15 @@ export default class SongCard extends React.Component {
             <div>
                 {num}. 
             </div>
-            <a href = {youTubeLink}>
+            <a href = {youTubeLink} className = "song">
                 {song.title} by {song.artist}
             </a>
+            <input
+                type="button"
+                // id={"asdf"}
+                className="remove-song-button"
+                // onClick={}
+                value={"✕"} />
             </div>
         )
     }
