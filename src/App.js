@@ -499,7 +499,9 @@ class App extends React.Component {
                 <DeleteSongModal
                     song = {this.state.songMarkedForDelete}
                     hideDeleteSongModalCallback = {this.hideDeleteSongModal}
-                    deleteSongCallback = {this.deleteMarkedSong}
+                    // deleteSongCallback = {this.deleteMarkedSong}
+                    deleteSongCallback = {this.deleteSongTransaction}
+                    songId = {this.state.songIdMarkedForDelete}
                 /> 
             </div>
         );
