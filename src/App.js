@@ -41,9 +41,17 @@ class App extends React.Component {
         this.state = {
             listKeyPairMarkedForDeletion : null,
             currentList : null,
-            sessionData : loadedSessionData
+            sessionData : loadedSessionData,
+            confirmDialog: false
         }
     }
+
+    toggleConfirmDialogOpen = () => {
+        this.state.confirmDialog = !this.state.confirmDialog;
+        console.log(this.state.confirmDialog);
+        return this.state.confirmDialogOpen;
+    }
+
     sortKeyNamePairsByName = (keyNamePairs) => {
         keyNamePairs.sort((keyPair1, keyPair2) => {
             // GET THE LISTS
@@ -369,38 +377,44 @@ class App extends React.Component {
 
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
-    showDeleteListModal() {
+    showDeleteListModal = () => {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.add("is-visible");
+        this.toggleConfirmDialogOpen();
     }
     // THIS FUNCTION IS FOR HIDING THE MODAL
-    hideDeleteListModal() {
+    hideDeleteListModal = () =>{
         let modal = document.getElementById("delete-list-modal");
         modal.classList.remove("is-visible");
+        this.toggleConfirmDialogOpen();
     }
 
     //THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER TO EDIT SONG
-    showEditSongModal(){
+    showEditSongModal = () => {
         let modal = document.getElementById("edit-song-modal");
         modal.classList.add("is-visible");
+        this.toggleConfirmDialogOpen();
     }
 
     // THIS FUNCTION IS FOR HIDING THE EDIT SONG MODAL
-    hideEditSongModal() {
+    hideEditSongModal = () => {
         let modal = document.getElementById("edit-song-modal");
         modal.classList.remove("is-visible");
+        this.toggleConfirmDialogOpen();
     }
 
     //THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER TO DELETE SONG
-    showDeleteSongModal(){
+    showDeleteSongModal = () => {
         let modal = document.getElementById("delete-song-modal");
         modal.classList.add("is-visible");
+        this.toggleConfirmDialogOpen();
     }
 
     //THIS FUNCTION IS FOR HIDING THE DELETE SONG MODAL
-    hideDeleteSongModal(){
+    hideDeleteSongModal = () => {
         let modal = document.getElementById("delete-song-modal");
         modal.classList.remove("is-visible");
+        this.toggleConfirmDialogOpen();
     }
 
     addSong = () =>{
@@ -471,6 +485,7 @@ class App extends React.Component {
     }
 
     render() {
+        let canAddList = this.state.currentList === null;
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
         let canRedo = this.tps.hasTransactionToRedo();
@@ -480,6 +495,7 @@ class App extends React.Component {
                 <Banner />
                 <SidebarHeading
                     createNewListCallback={this.createNewList}
+                    canAddList = {canAddList}
                 />
                 <SidebarList
                     currentList={this.state.currentList}
@@ -498,6 +514,7 @@ class App extends React.Component {
                     closeCallback={this.closeCurrentList}
                     addSongCallback = {this.addSongTransaction}
                     playlist = {this.state.currentList}
+                    confirmDialogOpen = {this.state.confirmDialog}
                 />
                 <PlaylistCards
                     currentList={this.state.currentList}

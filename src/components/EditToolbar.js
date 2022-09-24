@@ -9,18 +9,41 @@ export default class EditToolbar extends React.Component {
         this.props.addSongCallback(addSongIndex);
     }
 
+    enableButton = (buttonClass) => {
+        return buttonClass.replace("-disabled", "");
+    }
 
     render() {
         const { canAddSong, canUndo, canRedo, canClose, 
-                undoCallback, redoCallback, closeCallback, addSongCallback, playlist} = this.props;
-        let addSongClass = "toolbar-button";
-        let undoClass = "toolbar-button";
-        let redoClass = "toolbar-button";
-        let closeClass = "toolbar-button";
-        if (canAddSong) addSongClass += " disabled";
-        if (canUndo) undoClass += " disabled";
-        if (canRedo) redoClass += " disabled";
-        if (canClose) closeClass += " disabled";
+                undoCallback, redoCallback, closeCallback, addSongCallback, playlist, confirmDialogOpen} = this.props;
+
+        let addSongClass = "toolbar-button-disabled";
+        let undoClass = "toolbar-button-disabled";
+        let redoClass = "toolbar-button-disabled";
+        let closeClass = "toolbar-button-disabled";
+
+        if (playlist){
+            if (confirmDialogOpen === false){
+                if (canAddSong){
+                    addSongClass = this.enableButton(addSongClass);
+                }
+                if (canClose){
+                    closeClass = this.enableButton(closeClass);
+                }
+                if (canUndo){
+                    undoClass = this.enableButton(undoClass);
+                }
+                if (canRedo){
+                    redoClass = this.enableButton(redoClass);
+                }
+            }
+        }
+
+        // if (canAddSong) addSongClass += " disabled";
+        // if (canUndo) undoClass += " disabled";
+        // if (canRedo) redoClass += " disabled";
+        // if (canClose) closeClass += " disabled";
+
         return (
             <div id="edit-toolbar">
             <input 

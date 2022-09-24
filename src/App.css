@@ -119,6 +119,12 @@ body {
   font-size: 36pt;
 }
 
+.toolbar-button-disabled{
+  font-size: 36pt;
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
 .list-card, .selected-list-card, .unselected-list-card {
   font-size: 32pt;
   margin: 10px;
