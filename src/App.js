@@ -48,8 +48,7 @@ class App extends React.Component {
 
     toggleConfirmDialogOpen = () => {
         this.state.confirmDialog = !this.state.confirmDialog;
-        console.log(this.state.confirmDialog);
-        return this.state.confirmDialogOpen;
+        return this.state.confirmDialog;
     }
 
     sortKeyNamePairsByName = (keyNamePairs) => {
@@ -380,41 +379,65 @@ class App extends React.Component {
     showDeleteListModal = () => {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.add("is-visible");
-        this.toggleConfirmDialogOpen();
+        this.setState(prevState => {
+            return({
+                confirmDialog: this.toggleConfirmDialogOpen()
+            });
+        });
     }
     // THIS FUNCTION IS FOR HIDING THE MODAL
     hideDeleteListModal = () =>{
         let modal = document.getElementById("delete-list-modal");
         modal.classList.remove("is-visible");
-        this.toggleConfirmDialogOpen();
+        this.setState(prevState => {
+            return({
+                confirmDialog: this.toggleConfirmDialogOpen()
+            });
+        });
     }
 
     //THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER TO EDIT SONG
     showEditSongModal = () => {
         let modal = document.getElementById("edit-song-modal");
         modal.classList.add("is-visible");
-        this.toggleConfirmDialogOpen();
+        this.setState(prevState => {
+            return({
+                confirmDialog: this.toggleConfirmDialogOpen()
+            });
+        });
     }
 
     // THIS FUNCTION IS FOR HIDING THE EDIT SONG MODAL
     hideEditSongModal = () => {
         let modal = document.getElementById("edit-song-modal");
         modal.classList.remove("is-visible");
-        this.toggleConfirmDialogOpen();
+        this.setState(prevState => {
+            return({
+                confirmDialog: this.toggleConfirmDialogOpen()
+            });
+        });
     }
 
     //THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER TO DELETE SONG
     showDeleteSongModal = () => {
         let modal = document.getElementById("delete-song-modal");
         modal.classList.add("is-visible");
-        this.toggleConfirmDialogOpen();
+        this.setState(prevState => {
+            return({
+                confirmDialog: this.toggleConfirmDialogOpen()
+            });
+        });
     }
 
     //THIS FUNCTION IS FOR HIDING THE DELETE SONG MODAL
     hideDeleteSongModal = () => {
         let modal = document.getElementById("delete-song-modal");
         modal.classList.remove("is-visible");
-        this.toggleConfirmDialogOpen();
+        this.setState(prevState => {
+            return({
+                confirmDialog: this.toggleConfirmDialogOpen()
+            });
+        });
     }
 
     addSong = () =>{

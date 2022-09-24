@@ -24,12 +24,8 @@ export default class EditToolbar extends React.Component {
 
         if (playlist){
             if (confirmDialogOpen === false){
-                if (canAddSong){
-                    addSongClass = this.enableButton(addSongClass);
-                }
-                if (canClose){
-                    closeClass = this.enableButton(closeClass);
-                }
+                addSongClass = this.enableButton(addSongClass);
+                closeClass = this.enableButton(closeClass);
                 if (canUndo){
                     undoClass = this.enableButton(undoClass);
                 }
