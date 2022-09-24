@@ -519,6 +519,7 @@ class App extends React.Component {
                 <SidebarHeading
                     createNewListCallback={this.createNewList}
                     canAddList = {canAddList}
+                    confirmDialogOpen = {this.state.confirmDialog}
                 />
                 <SidebarList
                     currentList={this.state.currentList}

@@ -2,7 +2,7 @@ import React from "react";
 
 export default class SidebarHeading extends React.Component {
     handleClick = (event) => {
-        const { createNewListCallback, addListButton } = this.props;
+        const { createNewListCallback, addListButton, confirmDialogOpen } = this.props;
         createNewListCallback();
     };
 
@@ -13,7 +13,9 @@ export default class SidebarHeading extends React.Component {
     render() {
         let addListButton = "toolbar-button-disabled";
         if (this.props.canAddList){
-            addListButton = this.enableButton(addListButton);
+            if (!this.props.confirmDialogOpen){
+                addListButton = this.enableButton(addListButton);
+            }
         }
 
         return (
