@@ -1,8 +1,13 @@
 import React, {Component} from "react";
 
 export default class EditSongModal extends Component{
+    handleEditSong = (event) => {
+        event.preventDefault();
+        this.props.editSongCallback(this.props.editSongId - 1, this.props.oldSong);
+    }
+
     render(){
-        const {editSongCallback, hideEditSongModalCallback } = this.props;
+        const {editSongCallback, hideEditSongModalCallback, editSongId, oldSong } = this.props;
         return(
             <div 
                 class="modal" 
@@ -39,7 +44,7 @@ export default class EditSongModal extends Component{
                             <input type="button" 
                                 id="edit-song-confirm-button" 
                                 class="modal-button" 
-                                onClick={editSongCallback}
+                                onClick={this.handleEditSong}
                                 value='Confirm' />
                             <input type="button" 
                                 id="edit-song-cancel-button" 

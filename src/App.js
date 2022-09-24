@@ -9,6 +9,7 @@ import jsTPS from './common/jsTPS.js';
 import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
 import AddSong_Transaction from './transactions/AddSong_Transaction.js';
 import DeleteSong_Transaction from './transactions/DeleteSong_Transaction.js';
+import EditSong_Transaction from './transactions/EditSong_Transaction.js';
 
 // THESE REACT COMPONENTS ARE MODALS
 import DeleteListModal from './components/DeleteListModal.js';
@@ -287,6 +288,7 @@ class App extends React.Component {
         this.setState(prevState =>({
             currentList: prevState.currentList,
             songIdMarkedForEdit: songId,
+            oldSong: song,
             sessionData: prevState.sessionData
         }), () => {
             this.showEditSongModal();
@@ -294,16 +296,16 @@ class App extends React.Component {
     }
 
     //Editting the database
-    editSong = (key) => {
+    editSong = (key, newTitle, newArtist, newLink) => {
         let currentList = this.state.currentList;
         // console.log(currentList.key);
 
-        let newTitle = document.getElementById("edit-song-title-input").value;
-        let newArtist = document.getElementById("edit-song-artist-input").value;
-        let newLink = document.getElementById("edit-song-link-input").value;
+        // let newTitle = document.getElementById("edit-song-title-input").value;
+        // let newArtist = document.getElementById("edit-song-artist-input").value;
+        // let newLink = document.getElementById("edit-song-link-input").value;
 
         this.setState(prevState => {
-            currentList.songs[key - 1] = 
+            currentList.songs[key] = 
                 {
                     title: newTitle,
                     artist: newArtist,
@@ -448,7 +450,17 @@ class App extends React.Component {
         this.tps.addTransaction(transaction);
         this.hideDeleteSongModal();
     }
-    
+
+    editSongTransaction = (songIndex, oldSong) => {
+        let newTitle = document.getElementById("edit-song-title-input").value;
+        let newArtist = document.getElementById("edit-song-artist-input").value;
+        let newLink = document.getElementById("edit-song-link-input").value;
+
+        let transaction = new EditSong_Transaction(this, songIndex, newTitle, newArtist, newLink, oldSong);
+        this.tps.addTransaction(transaction);
+        this.hideEditSongModal();
+    }
+
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
@@ -492,9 +504,11 @@ class App extends React.Component {
                     deleteListCallback={this.deleteMarkedList}
                 />
                 <EditSongModal
-                    // songKeyPair={this.state.songKeyPairMarkedForEdit}
                     hideEditSongModalCallback={this.hideEditSongModal}
-                    editSongCallback={this.editMarkedSong}
+                    // editSongCallback={this.editMarkedSong}
+                    editSongCallback = {this.editSongTransaction}
+                    editSongId = {this.state.songIdMarkedForEdit}
+                    oldSong = {this.state.oldSong}
                 />
                 <DeleteSongModal
                     song = {this.state.songMarkedForDelete}
