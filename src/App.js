@@ -8,6 +8,7 @@ import jsTPS from './common/jsTPS.js';
 // OUR TRANSACTIONS
 import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
 import AddSong_Transaction from './transactions/AddSong_Transaction.js';
+import DeleteSong_Transaction from './transactions/DeleteSong_Transaction.js';
 
 // THESE REACT COMPONENTS ARE MODALS
 import DeleteListModal from './components/DeleteListModal.js';
@@ -358,6 +359,7 @@ class App extends React.Component {
         });
     }
 
+    //Unused from now on -- once you start transactions
     deleteMarkedSong = () => {
         this.hideDeleteSongModal();
         this.deleteSong(this.state.songIdMarkedForDelete - 1);
@@ -419,12 +421,34 @@ class App extends React.Component {
             });
         }
     }
+
+    addSongWithIndex = (deletedSongIndex, deletedSong) => {
+        let currList = this.state.currentList;
+        if (currList){
+            currList.songs.splice(deletedSongIndex, 0, deletedSong);
+        }
+        this.setState(prevState => {
+            return ({
+                currentList: currList
+            })
+        }, () => {
+            this.db.mutationUpdateList(this.state.currentList);
+            this.db.mutationUpdateSessionData(this.state.sessionData);
+        });
+    }
     
+    //TRANSACTIONS START HERE
     addSongTransaction = (addSongIndex) =>{
         let transaction = new AddSong_Transaction(this, addSongIndex);
         this.tps.addTransaction(transaction);
     }
 
+    deleteSongTransaction = (songIndex, deletedSong) => {
+        let transaction = new DeleteSong_Transaction(this, songIndex, deletedSong);
+        this.tps.addTransaction(transaction);
+        this.hideDeleteSongModal();
+    }
+    
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();

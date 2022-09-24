@@ -14,7 +14,6 @@ export default class DBManager {
 
     queryIsSong = (key, queryList) => {
         let song = queryList.songs[key - 1];
-        console.log(song);
         return song != null;
     }
 
@@ -38,7 +37,6 @@ export default class DBManager {
 
     mutationUpdateList = (list) => {
         // AND FLOW THOSE CHANGES TO LOCAL STORAGE
-        console.log(list);
         let listString = JSON.stringify(list);
         localStorage.setItem("playlister-list-" + list.key, listString);
     }
@@ -59,7 +57,6 @@ export default class DBManager {
             if (this.queryIsSong(key, queryList)){
                 queryList.songs[key - 1] = newSong;
                 let newQueryList = JSON.stringify(queryList);
-                console.log(newQueryList);
                 localStorage.setItem("playlister-list-" + listKey, newQueryList);
             }
         }
