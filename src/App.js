@@ -329,10 +329,12 @@ class App extends React.Component {
     }
 
     markSongForDelete = (songId) => {
+        let song = this.state.currentList.songs[songId - 1];
         this.setState(prevState => {
             return ({
                 currentList: prevState.currentList,
                 songIdMarkedForDelete: songId,
+                songMarkedForDelete: song,
                 sessionData: prevState.sessionData
             })},() => {
                 this.showDeleteSongModal();
@@ -396,6 +398,24 @@ class App extends React.Component {
         modal.classList.remove("is-visible");
     }
 
+    addSong = () =>{
+        let currList = this.state.currentList;
+        if (currList){
+            let newSongs = {
+                title: "Untitled",
+                artist: "Unknown",
+                youTubeId: "dQw4w9WgXcQ"
+            };
+
+            currList.songs.push(newSongs);
+            this.setState(prevState => {
+                return ({
+                    currentList: currList
+                });
+            });
+        }
+    }
+
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
@@ -422,6 +442,7 @@ class App extends React.Component {
                     undoCallback={this.undo}
                     redoCallback={this.redo}
                     closeCallback={this.closeCurrentList}
+                    addSongCallback = {this.addSong}
                 />
                 <PlaylistCards
                     currentList={this.state.currentList}
@@ -442,6 +463,7 @@ class App extends React.Component {
                     editSongCallback={this.editMarkedSong}
                 />
                 <DeleteSongModal
+                    song = {this.state.songMarkedForDelete}
                     hideDeleteSongModalCallback = {this.hideDeleteSongModal}
                     deleteSongCallback = {this.deleteMarkedSong}
                 /> 
