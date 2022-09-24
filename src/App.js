@@ -401,17 +401,20 @@ class App extends React.Component {
     addSong = () =>{
         let currList = this.state.currentList;
         if (currList){
-            let newSongs = {
+            let newSong = {
                 title: "Untitled",
                 artist: "Unknown",
                 youTubeId: "dQw4w9WgXcQ"
             };
 
-            currList.songs.push(newSongs);
+            currList.songs.push(newSong);
             this.setState(prevState => {
                 return ({
                     currentList: currList
                 });
+            }, () => {
+                this.db.mutationUpdateList(this.state.currentList);
+                this.db.mutationUpdateSessionData(this.state.sessionData);
             });
         }
     }
