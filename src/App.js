@@ -461,13 +461,22 @@ class App extends React.Component {
         this.hideEditSongModal();
     }
 
+    ctrlFunction = (event) => {
+        if (event.ctrlKey && event.key === 'z'){
+            this.undo();
+        }
+        else if (event.ctrlKey && event.key === 'y'){
+            this.redo();
+        }
+    }
+
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
         let canRedo = this.tps.hasTransactionToRedo();
         let canClose = this.state.currentList !== null;
         return (
-            <div id="root">
+            <div id="root" onKeyDown = {this.ctrlFunction}>
                 <Banner />
                 <SidebarHeading
                     createNewListCallback={this.createNewList}
