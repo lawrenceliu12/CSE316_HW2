@@ -7,6 +7,7 @@ import jsTPS from './common/jsTPS.js';
 
 // OUR TRANSACTIONS
 import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
+import AddSong_Transaction from './transactions/AddSong_Transaction.js';
 
 // THESE REACT COMPONENTS ARE MODALS
 import DeleteListModal from './components/DeleteListModal.js';
@@ -418,6 +419,11 @@ class App extends React.Component {
             });
         }
     }
+    
+    addSongTransaction = (addSongIndex) =>{
+        let transaction = new AddSong_Transaction(this, addSongIndex);
+        this.tps.addTransaction(transaction);
+    }
 
     render() {
         let canAddSong = this.state.currentList !== null;
@@ -445,7 +451,8 @@ class App extends React.Component {
                     undoCallback={this.undo}
                     redoCallback={this.redo}
                     closeCallback={this.closeCurrentList}
-                    addSongCallback = {this.addSong}
+                    addSongCallback = {this.addSongTransaction}
+                    playlist = {this.state.currentList}
                 />
                 <PlaylistCards
                     currentList={this.state.currentList}
