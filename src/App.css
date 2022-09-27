@@ -328,6 +328,21 @@ span {
   margin-top: 1rem;
 }
 
+.edit-modal-content{
+  display:absolute;
+}
+
+#edit-song-title, #edit-song-artist, #edit-song-link{
+  font-size: 30px;
+  padding: 3px;
+}
+
+#edit-song-title-input, #edit-song-artist-input, #edit-song-link-input{
+  font-size: 20px;
+  float: right;
+  margin-left: 20px;
+}
+
 /* ANIMATIONS
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 [data-animation] .modal-root {

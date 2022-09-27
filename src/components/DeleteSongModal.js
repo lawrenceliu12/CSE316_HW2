@@ -25,8 +25,7 @@ export default class DeleteSongModal extends Component{
 
                         <div class = "modal-center">
                             <div class = "modal-center-content">
-                                {/* TODO: Make sure to add name by artist. figure out later */}
-                                Are you sure you wish to permanently delete {<b>{title}</b>}?
+                                Are you sure you wish to permanently delete {<b>{title}</b>} from the playlist?
                             </div>
                         </div>
                         
