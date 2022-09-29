@@ -342,7 +342,8 @@ class App extends React.Component {
             // IS AN AFTER EFFECT
             // console.log("Key 1:", key);
             // console.log("\n\n", this.state.currentList, "\n\n");
-            this.db.mutationEditSong(key, currentList.key, currentList.songs[key-1]);
+            this.setStateWithUpdatedList(currentList);
+            // this.db.mutationEditSong(key, currentList.key, currentList.songs[key-1]);
 
             // SO IS STORING OUR SESSION DATA
             this.db.mutationUpdateSessionData(this.state.sessionData);

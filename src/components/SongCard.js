@@ -39,7 +39,13 @@ export default class SongCard extends React.Component {
     }
     handleDrop = (event) => {
         event.preventDefault();
-        let target = event.target;
+        let target = null;
+        if (!event.target.id){
+            target = event.target.parentElement.parentElement;
+        }
+        else{
+            target = event.target;
+        }
         let targetId = target.id;
         targetId = targetId.substring(target.id.indexOf("-") + 1);
         let sourceId = event.dataTransfer.getData("song");
@@ -94,8 +100,8 @@ export default class SongCard extends React.Component {
             >
             <span>
                 {num}.
-                <a href = {youTubeLink}>{song.title} </a> by
-                <a href = {youTubeLink}> {song.artist}</a>
+                <a href = {youTubeLink} draggable = {false}>{song.title} </a> by
+                <a href = {youTubeLink} draggable = {false}> {song.artist}</a>
             </span>
             <input
                 type="button"
