@@ -254,6 +254,14 @@ class App extends React.Component {
 
             // MAKE SURE THE LIST GETS PERMANENTLY UPDATED
             this.db.mutationUpdateList(this.state.currentList);
+            this.setState(prevState => ({
+                canUndo: true
+            }))
+        }
+        else{
+            this.setState(prevState => ({
+                canUndo: false
+            }))
         }
     }
     // THIS FUNCTION BEGINS THE PROCESS OF PERFORMING A REDO
@@ -263,6 +271,14 @@ class App extends React.Component {
 
             // MAKE SURE THE LIST GETS PERMANENTLY UPDATED
             this.db.mutationUpdateList(this.state.currentList);
+            this.setState(prevState => ({
+                canRedo: true
+            }))
+        }
+        else{
+            this.setState(prevState => ({
+                canRedo: false
+            }))
         }
     }
 
@@ -498,23 +514,34 @@ class App extends React.Component {
         this.hideEditSongModal();
     }
 
-    ctrlFunction = (event) => {
-        if (event.ctrlKey && event.key === 'z'){
-            this.undo();
-        }
-        else if (event.ctrlKey && event.key === 'y'){
-            this.redo();
-        }
-    }
+    // ctrlFunction = (event) => {
+    //     console.log(event);
+    //     if (event.ctrlKey && event.key === 'z'){
+    //         this.undo();
+    //     }
+    //     else if (event.ctrlKey && event.key === 'y'){
+    //         this.redo();
+    //     }
+    // }
 
     render() {
         let canAddList = this.state.currentList === null;
         let canAddSong = this.state.currentList !== null;
-        let canUndo = this.tps.hasTransactionToUndo();
-        let canRedo = this.tps.hasTransactionToRedo();
+        let canUndo = this.state.canUndo;
+        let canRedo = this.state.canRedo;
+        canUndo = this.tps.hasTransactionToUndo();
+        canRedo = this.tps.hasTransactionToRedo();
         let canClose = this.state.currentList !== null;
+        document.onkeydown = (event) => {
+            if (event.ctrlKey && event.code === 'KeyZ'){
+                this.undo();
+            }
+            if (event.ctrlKey && event.code === 'KeyY'){
+                this.redo();
+            }
+        }
         return (
-            <div id="root" onKeyDown = {this.ctrlFunction}>
+            <div id="root">
                 <Banner />
                 <SidebarHeading
                     createNewListCallback={this.createNewList}
