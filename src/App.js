@@ -181,6 +181,7 @@ class App extends React.Component {
     }
     // THIS FUNCTION BEGINS THE PROCESS OF LOADING A LIST FOR EDITING
     loadList = (key) => {
+        this.tps.clearAllTransactions();
         let newCurrentList = this.db.queryGetList(key);
         this.setState(prevState => ({
             listKeyPairMarkedForDeletion : prevState.listKeyPairMarkedForDeletion,
@@ -194,6 +195,7 @@ class App extends React.Component {
     }
     // THIS FUNCTION BEGINS THE PROCESS OF CLOSING THE CURRENT LIST
     closeCurrentList = () => {
+        this.tps.clearAllTransactions();
         this.setState(prevState => ({
             listKeyPairMarkedForDeletion : prevState.listKeyPairMarkedForDeletion,
             currentList: null,
@@ -254,9 +256,11 @@ class App extends React.Component {
 
             // MAKE SURE THE LIST GETS PERMANENTLY UPDATED
             this.db.mutationUpdateList(this.state.currentList);
-            this.setState(prevState => ({
-                canUndo: true
-            }))
+            if (this.state.currentList){
+                this.setState(prevState => ({
+                    canUndo: false
+                }))
+            }
         }
         else{
             this.setState(prevState => ({
@@ -271,9 +275,11 @@ class App extends React.Component {
 
             // MAKE SURE THE LIST GETS PERMANENTLY UPDATED
             this.db.mutationUpdateList(this.state.currentList);
-            this.setState(prevState => ({
-                canRedo: true
-            }))
+            if (this.state.currentList){
+                this.setState(prevState => ({
+                    canUndo: false
+                }))
+            }
         }
         else{
             this.setState(prevState => ({
